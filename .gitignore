@@ -1,0 +1,12 @@
+.gradle/
+bin/
+build/classes/
+build/generated/
+build/resources/
+build/kotlin/
+build/snapshot/
+build/tmp/
+.repository.md
+minecraft-purge.code-workspace
+/resources/
+resource-pack/

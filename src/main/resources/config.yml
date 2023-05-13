@@ -1,0 +1,21 @@
+# This is the main configuration file for the plugin.
+# You can find more information about this file here:
+# https://github.com/josantonius/minecraft-purge
+
+# Purge sound announce.
+# This is the sound that will be played when the purge announces.
+# Default: minecraft:purge.sound.announce
+announcePurgeSound: "minecraft:purge.sound.announce"
+
+# Purge sound.
+# This is the sound that will be played when the purge ongoing.
+# Default: minecraft:purge.sound.ongoing
+ongoingPurgeSound: "minecraft:purge.sound.ongoing"
+
+# Purge sound end.
+# This is the sound that will be played when the purge ends.
+# Default: minecraft:purge.sound.end
+endPurgeSound: "minecraft:purge.sound.end"
+
+# Commands that players without immunity will not be allowed to use during the purge.
+blockedCommands: null

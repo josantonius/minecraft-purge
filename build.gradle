@@ -1,0 +1,104 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'org.jetbrains.kotlin.jvm' version '1.8.20'
+    id 'maven-publish'
+}
+
+group 'dev.josantonius.minecraft.purge'
+version '1.0.0'
+
+ext {
+    _name = 'purge'
+    _server = 'purpur'
+    _api = '1.19.3'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven { url "https://repo.purpurmc.org/snapshots" }
+}
+
+dependencies {
+    compileOnly("org.purpurmc.purpur:purpur-api:1.19.3-R0.1-SNAPSHOT")
+    compileOnly("net.luckperms:api:5.4")
+    implementation('org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10')
+    implementation('dev.josantonius:minecraft-messaging:v1.1.0')
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'dev.josantonius.minecraft.purge.Main'
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('all')
+    archiveFileName.set("${_name}-${version}-${_server}-${_api}.jar")
+    mergeServiceFiles()
+    append('META-INF/licenses/')
+    exclude 'META-INF/*.DSA'
+    exclude 'META-INF/*.RSA'
+    exclude 'META-INF/*.SF'
+    exclude 'META-INF/*.MF'
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << "-Xlint:deprecation"
+}
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+}
+
+jar {
+    exclude('.github/**')
+    exclude('libs/**')
+    exclude('.gitignore')
+    exclude('.CHANGELOG.md')
+    exclude('README.md')
+    exclude('LICENSE')
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'dev.josantonius.minecraft.purge'
+            artifactId = 'minecraft-plugin'
+            version = 'boss_bar'
+            pom {
+                name = 'Minecraft Purge Plugin'
+                description = 'Purge plugin for Minecraft'
+                url = 'https://github.com/josantonius/minecraft-purge'
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://github.com/josantonius/minecraft-purge/blob/main/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'josantonius'
+                        name = 'Josantonius'
+                        email = 'hello@josantonius.dev'
+                    }
+                }
+            }
+
+            from components.java
+        }
+    }
+}

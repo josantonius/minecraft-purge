@@ -1,0 +1,20 @@
+name: Purge
+version: 1.0.0
+main: dev.josantonius.minecraft.purge.Main
+api-version: 1.19
+author: Josantonius
+description: Purge plugin for Minecraft
+
+commands:
+  purge:
+    description: Purge commands
+    permission: purge.use
+    permission-message: "&cYou don't have permission to use this command."
+
+permissions:
+  purge.use:
+    default: op
+    description: Allows the use of Purge commands
+  purge.admin:
+    default: op
+    description: Allows the use of Purge admin commands

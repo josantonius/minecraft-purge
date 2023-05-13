@@ -1,0 +1,84 @@
+# This file contains all the messages required for the plugin.
+# DO NOT delete any messages here completely or it may break the plugin.
+# You're free to change them as you please, however.
+# You can find more information about this file here:
+# https://github.com/josantonius/minecraft-purge
+
+rules:
+  rule_1: "<dark_gray><strikethrough>Rule 04</strikethrough> <red>- <dark_aqua>PvP abuse is allowed"
+  rule_2: "<dark_gray><strikethrough>Rule 11</strikethrough> <red>- <dark_aqua>TPA Kill is allowed"
+
+privileges:
+  privilege_1: "<dark_gray><strikethrough>Privilege 08</strikethrough> <red>- <dark_aqua>Experience is dropped upon death"
+  privilege_2: "<dark_gray><strikethrough>Privilege 15</strikethrough> <red>- <dark_aqua>Inventory is dropped upon death"
+  privilege_3: "<dark_gray><strikethrough>Privilege 24</strikethrough> <red>- <dark_aqua>Backpack is dropped upon death"
+
+purge:
+  announce: "<red>THE PURGE IS ABOUT TO BEGIN!"
+  start: "<red>THE PURGE HAS BEGUN!"
+  end: "<red>THE PURGE HAS ENDED!"
+  cancel: "<red>THE PURGE HAS BEEN CANCELLED!"
+  with_rules: "<red>Overruled rules:"
+  without_rules: "<red>No rules are overruled during the purge."
+  with_privileges: "<red>Overruled privileges:"
+  without_privileges: "<red>No privileges are overruled during the purge."
+  button:
+    request_immunity: "<hover:show_text:'<yellow>Request to be granted immunity<newline>during the purge. If granted,<newline>other players won\\'t be able to harm you<newline>and you won\\'t lose your inventory, backpack,<newline>or experience upon death.<newline><gray>Click to execute:<yellow> /purge exit'><click:run_command:/purge exit><yellow>CLICK HERE TO BEG FOR IMMUNITY</click></hover>"
+    use_immunity: "<hover:show_text:'<yellow>As a member of the administration, you have<newline>the right to immunity during the purge.<newline>Other players won\\'t be able to harm you<newline>and you won\\'t lose your inventory, backpack,<newline>or experience upon death.<newline><gray>Click to execute:<yellow> /purge exit'><click:run_command:/purge exit><yellow>CLICK HERE TO CLAIM IMMUNITY</click></hover>"
+
+immunity:
+  granted:
+    confirmation: "<gray>{1} <dark_aqua>will have immunity in the purge"
+    advise: "<gray>{1} <dark_aqua>is now immune"
+    announce: "<dark_aqua>Immunity accepted for <gray>{1}"
+  denied:
+    confirmation: "<gray>{1} <red>will not have immunity in the purge"
+    advise: "<gray>{1} <red>is no longer immune"
+    announce: "<red>Immunity denied for <gray>{1}"
+  request:
+    by_staff: "<white>{1} <gray>claimed their right to immunity"
+    by_player: "<white>{1} <gray>begs for immunity"
+    question: "<gray>Grant immunity to <white>{1}<gray>? <hover:show_text:'<dark_aqua>Grant immunity during the purge.<newline><gray>/purge immune add {1}'><click:run_command:/purge immune add {1}><dark_aqua>[YES]</click></hover><gray> <hover:show_text:'<red>Do not grant immunity during the purge.<newline><gray>/purge immune remove {1}'><click:run_command:/purge immune remove {1}><red>[NO]</click></hover>"
+
+boss_bar:
+  start: "The purge will start in:"
+  end: "The purge will end in:"
+
+title:
+  purge:
+    announce: "<red><bold><font:uniform>THE PURGE IS ABOUT TO BEGIN!"
+    start: "<red><bold><font:uniform>THE PURGE HAS BEGUN!"
+    end: "<red><bold><font:uniform>THE PURGE HAS ENDED!"
+    cancel: "<red><bold><font:uniform>THE PURGE HAS BEEN CANCELLED!"
+
+error:
+  command:
+    not_allowed: "<dark_red>You cannot use this command during the purge"
+    usage: "<dark_red>Use <gray>{1}"
+    permission: "<dark_red>You do not have permission to use this command"
+    for_players: "<dark_red>This command can only be used by players"
+  time:
+    invalid: "<dark_red>The set time is not valid"
+  purge:
+    active: "<dark_red>There is already a purge in progress"
+    not_active: "<dark_red>There is no purge in progress"
+    already_started: "<dark_red>The purge has already started"
+  player:
+    offline: "<gray>{1} <dark_red>is not connected"
+    already_immune: "<gray>{1} <dark_red>is already immune"
+    already_applicant: "<dark_red>You have already applied for immunity"
+    not_immune: "<gray>{1} <dark_red>is not immune"
+  immunity:
+    already_granted: "<dark_red>You have already been granted immunity"
+
+plugin:
+  reloaded: "<dark_aqua>Plugin reloaded successfully!"
+
+help:
+  header: "<red>COMMANDS"
+  start: "<gray>{1}<dark_gray> - <red>Start the purge"
+  end: "<gray>{1}<dark_gray> - <red>End the purge"
+  cancel: "<gray>{1}<dark_gray> - <red>Cancel the purge"
+  immune: "<gray>{1}<dark_gray> - <red>Manage immunity"
+  exit: "<gray>{1}<dark_gray> - <red>Request immunity"
+  reload: "<gray>{1}<dark_gray> - <red>Reload the plugin"
