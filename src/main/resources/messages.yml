@@ -18,26 +18,31 @@ purge:
   start: "<red>THE PURGE HAS BEGUN!"
   end: "<red>THE PURGE HAS ENDED!"
   cancel: "<red>THE PURGE HAS BEEN CANCELLED!"
-  with_rules: "<red>Overruled rules:"
-  without_rules: "<red>No rules are overruled during the purge."
-  with_privileges: "<red>Overruled privileges:"
-  without_privileges: "<red>No privileges are overruled during the purge."
+  with_rules: "<red>Nullified rules:"
+  without_rules: "<red>No rules nullified during the purge."
+  with_privileges: "<red>Nullified privileges:"
+  without_privileges: "<red>No privileges nullified during the purge."
   button:
-    request_immunity: "<hover:show_text:'<yellow>Request to be granted immunity<newline>during the purge. If granted,<newline>other players won\\'t be able to harm you<newline>and you won\\'t lose your inventory, backpack,<newline>or experience upon death.<newline><gray>Click to execute:<yellow> /purge exit'><click:run_command:/purge exit><yellow>CLICK HERE TO BEG FOR IMMUNITY</click></hover>"
-    use_immunity: "<hover:show_text:'<yellow>As a member of the administration, you have<newline>the right to immunity during the purge.<newline>Other players won\\'t be able to harm you<newline>and you won\\'t lose your inventory, backpack,<newline>or experience upon death.<newline><gray>Click to execute:<yellow> /purge exit'><click:run_command:/purge exit><yellow>CLICK HERE TO CLAIM IMMUNITY</click></hover>"
+    request_immunity: "<hover:show_text:'<yellow>Request for immunity to be granted<newline>during the purge. If granted,<newline>other players will not be able to harm you<newline>and you won\\'t lose your inventory, backpack,<newline>or experience upon death.<newline><gray>Click to run:<yellow> /purge exit'><click:run_command:/purge exit><yellow>CLICK HERE TO PLEAD FOR IMMUNITY</click></hover>"
+    use_immunity: "<hover:show_text:'<yellow>As a member of the administration, you have<newline>the right to immunity during the purge.<newline>Other players will not be able to harm you<newline>and you won\\'t lose your inventory, backpack,<newline>or experience upon death.<newline><gray>Click to run:<yellow> /purge exit'><click:run_command:/purge exit><yellow>CLICK HERE TO CLAIM IMMUNITY</click></hover>"
 
 immunity:
+  player_prefix: "[Immune] "
   granted:
     confirmation: "<gray>{1} <dark_aqua>will have immunity in the purge"
     advise: "<gray>{1} <dark_aqua>is now immune"
     announce: "<dark_aqua>Immunity accepted for <gray>{1}"
+    info: "<dark_aqua>You will be granted immunity at the start of the purge"
+  pending:
+    ungranted_info: "<dark_aqua>The administration will decide if you are granted immunity"
+    granted_info: "<dark_aqua>You will be granted immunity within a few minutes"
   denied:
     confirmation: "<gray>{1} <red>will not have immunity in the purge"
     advise: "<gray>{1} <red>is no longer immune"
-    announce: "<red>Immunity denied for <gray>{1}"
+    announce: "<red>Immunity rejected for <gray>{1}"
   request:
     by_staff: "<white>{1} <gray>claimed their right to immunity"
-    by_player: "<white>{1} <gray>begs for immunity"
+    by_player: "<white>{1} <gray> begs for immunity"
     question: "<gray>Grant immunity to <white>{1}<gray>? <hover:show_text:'<dark_aqua>Grant immunity during the purge.<newline><gray>/purge immune add {1}'><click:run_command:/purge immune add {1}><dark_aqua>[YES]</click></hover><gray> <hover:show_text:'<red>Do not grant immunity during the purge.<newline><gray>/purge immune remove {1}'><click:run_command:/purge immune remove {1}><red>[NO]</click></hover>"
 
 boss_bar:
@@ -50,6 +55,9 @@ title:
     start: "<red><bold><font:uniform>THE PURGE HAS BEGUN!"
     end: "<red><bold><font:uniform>THE PURGE HAS ENDED!"
     cancel: "<red><bold><font:uniform>THE PURGE HAS BEEN CANCELLED!"
+  player:
+    death: "<font:uniform><red>{1} has died"
+    death_by_player: "<font:uniform><red>{1} has eliminated {2}"
 
 error:
   command:
@@ -58,21 +66,30 @@ error:
     permission: "<dark_red>You do not have permission to use this command"
     for_players: "<dark_red>This command can only be used by players"
   time:
-    invalid: "<dark_red>The set time is not valid"
+    invalid: "<dark_red>The set time is invalid"
   purge:
     active: "<dark_red>There is already a purge in progress"
     not_active: "<dark_red>There is no purge in progress"
     already_started: "<dark_red>The purge has already started"
+    already_ending: "<dark_red>You can no longer request immunity"
   player:
     offline: "<gray>{1} <dark_red>is not connected"
     already_immune: "<gray>{1} <dark_red>is already immune"
-    already_applicant: "<dark_red>You have already applied for immunity"
+    already_applicant: "<dark_red>You have already requested immunity"
     not_immune: "<gray>{1} <dark_red>is not immune"
   immunity:
     already_granted: "<dark_red>You have already been granted immunity"
+  world:
+    access_denied: "<dark_red>The world <gray>{1} <dark_red>is not available"
+  item:
+    with_cooldown: "<dark_red>You must wait <gray>{1}s <dark_red>before using <gray>{2}"
 
 plugin:
-  reloaded: "<dark_aqua>Plugin reloaded successfully!"
+  reloaded: "<dark_aqua>Plugin successfully reloaded!"
+
+material:
+  ender_pearl: "ender pearls"
+  firework_rocket: "rockets"
 
 help:
   header: "<red>COMMANDS"

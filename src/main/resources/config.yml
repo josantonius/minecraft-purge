@@ -19,3 +19,15 @@ endPurgeSound: "minecraft:purge.sound.end"
 
 # Commands that players without immunity will not be allowed to use during the purge.
 blockedCommands: null
+
+# Main world. Here players will be sent from the locked worlds.
+mainWorld: null
+
+# Worlds that will not be used during the purge.
+blockedWorlds: null
+
+# Apply a cooldown of n seconds between uses to the ender pearls.
+enderPearlCooldown: null
+
+# Apply a cooldown of n seconds between uses to the firework rockets.
+fireworkRocketCooldown: null

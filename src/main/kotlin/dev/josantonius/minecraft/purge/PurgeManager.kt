@@ -14,6 +14,7 @@ class PurgeManager(private val plugin: Main) {
     private var grantImmunity: Boolean = false
     private var purgeTask: BukkitTask? = null
     private var showRulesTask: BukkitTask? = null
+    private var purgeSoundTask: BukkitTask? = null
     private val announcementBossBar: PurgeBossBar
     private val startedBossBar: PurgeBossBar
     private val purgeSound = PurgeSound(plugin)
@@ -86,12 +87,12 @@ class PurgeManager(private val plugin: Main) {
         purgeSound.stopPluginMusic()
         startedBossBar.hidden()
         announcementBossBar.hidden()
-        cancelTask()
-        cancelShowRulesTask()
+        cancelTasks()
         dependency.restoreConfig()
         player.resetPlayerList()
         status.ended()
         purgeInfo.clear()
+        plugin.load()
     }
 
     fun getNoticeBossBar(): PurgeBossBar {
@@ -141,6 +142,25 @@ class PurgeManager(private val plugin: Main) {
 
     fun grantImmunity(): Boolean {
         return grantImmunity
+    }
+
+    private fun sendPlayersToMainWorld() {
+        val blockedWorlds = plugin.configuration.getBlockedWorlds()
+        val mainWorld = plugin.configuration.getMainWorld()
+        if (blockedWorlds == null || mainWorld == null) return
+        for (onlinePlayer in Bukkit.getServer().onlinePlayers) {
+            if (onlinePlayer.hasPermission("purge.admin") || player.immunity.isImmune(onlinePlayer))
+                    return
+            if (blockedWorlds.contains(onlinePlayer.world.name)) {
+                val defaultWorld = Bukkit.getServer().getWorld(mainWorld) ?: return
+                plugin.sendMessage(
+                        onlinePlayer,
+                        "error.world.access_denied",
+                        onlinePlayer.world.name
+                )
+                onlinePlayer.teleport(defaultWorld.spawnLocation)
+            }
+        }
     }
 
     private fun setPurgeInfo() {
@@ -250,8 +270,12 @@ class PurgeManager(private val plugin: Main) {
                 plugin.message.broadcast("purge.start")
                 dependency.setConfig()
                 player.immunity.managePrivileges()
+                sendPlayersToMainWorld()
                 purgeSound.stopPluginMusic()
-                purgeSound.playOngoingPurgeSound()
+                val soundPeriod = Duration.ofMinutes(3).plusSeconds(4).toTicks()
+                val soundRunnable = Runnable { purgeSound.playOngoingPurgeSound() }
+                purgeSoundTask =
+                        Bukkit.getScheduler().runTaskTimer(plugin, soundRunnable, 0L, soundPeriod)
                 announcementBossBar.hidden()
                 showStartPurgeTitleToAll()
                 startedBossBar.show()
@@ -266,14 +290,13 @@ class PurgeManager(private val plugin: Main) {
         }
     }
 
-    private fun cancelShowRulesTask() {
-        showRulesTask?.cancel()
-        showRulesTask = null
-    }
-
-    private fun cancelTask() {
+    private fun cancelTasks() {
         purgeTask?.cancel()
         purgeTask = null
+        purgeSoundTask?.cancel()
+        purgeSoundTask = null
+        showRulesTask?.cancel()
+        showRulesTask = null
     }
 
     private fun Duration.toTicks(): Long {

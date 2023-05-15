@@ -5,10 +5,10 @@ import dev.josantonius.minecraft.messaging.Title
 import dev.josantonius.minecraft.purge.command.PurgeCommandExecutor
 import dev.josantonius.minecraft.purge.command.PurgeTabCompleter
 import java.io.File
+import kotlin.math.ceil
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.*
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.SpectralArrow
@@ -16,11 +16,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.HandlerList
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.entity.PotionSplashEvent
 import org.bukkit.event.entity.ProjectileHitEvent
+import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerCommandPreprocessEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemConsumeEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
@@ -33,6 +36,7 @@ class Main : JavaPlugin(), Listener {
     lateinit var purge: PurgeManager
     lateinit var message: Message
     lateinit var title: Title
+    val lastUsed = mutableMapOf<Player, MutableMap<Material, Long>>()
 
     override fun onEnable() {
         load()
@@ -52,6 +56,7 @@ class Main : JavaPlugin(), Listener {
             purge.player.add(player)
             purge.showPurgeInfoToPlayer(player)
         } else if (purge.player.immunity.isImmune(player)) {
+            message.sendToPlayers("immunity.granted.advise", player.name)
             Bukkit.getScheduler()
                     .scheduleSyncDelayedTask(
                             this,
@@ -72,13 +77,15 @@ class Main : JavaPlugin(), Listener {
     @EventHandler
     fun onPlayerDeath(event: PlayerDeathEvent) {
         if (!purge.status.isStarted()) return
-        val player = event.entity
-        if (purge.player.immunity.isImmune(player)) {
+        val victim = event.entity
+        val killer = victim.killer
+        if (purge.player.immunity.isImmune(victim)) {
             event.keepInventory = true
             event.keepLevel = true
             event.drops.clear()
             event.setDroppedExp(0)
         }
+        showDeathTitleToAll(victim, killer)
     }
 
     @EventHandler
@@ -192,6 +199,62 @@ class Main : JavaPlugin(), Listener {
         }
     }
 
+    @EventHandler
+    fun onWorldChange(event: PlayerChangedWorldEvent) {
+        if (!purge.status.isStarted()) return
+        val player = event.player
+        if (player.hasPermission("purge.admin") || purge.player.immunity.isImmune(player)) return
+        val worldName = player.location.world.name
+        val blockedWorlds = configuration.getBlockedWorlds()
+        val mainWorld = configuration.getMainWorld()
+        if (mainWorld != null && blockedWorlds != null && blockedWorlds.contains(worldName)) {
+            val defaultWorld = Bukkit.getServer().getWorld(mainWorld) ?: return
+            sendMessage(player, "error.world.access_denied", worldName)
+            player.teleport(defaultWorld.spawnLocation)
+        }
+    }
+
+    @EventHandler
+    fun onPlayerInteract(event: PlayerInteractEvent) {
+        if (!purge.status.isStarted()) return
+        val player = event.player
+        if (purge.player.immunity.isImmune(player)) return
+        val action = event.action
+        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) {
+            return
+        }
+
+        val item = event.item
+        val isFireworkRocket = item?.type == Material.FIREWORK_ROCKET
+        val isEnderPearl = item?.type == Material.ENDER_PEARL
+        if (item != null && (isFireworkRocket || isEnderPearl)) {
+            val cooldown =
+                    configuration.let {
+                        if (isFireworkRocket) it.getFireworkRocketCooldown()
+                        else it.getEnderPearlCooldown()
+                    }
+            val type =
+                    if (isFireworkRocket) message.getString("material.firework_rocket")
+                    else message.getString("material.ender_pearl")
+            if (cooldown > 0) {
+                val currentTime = System.currentTimeMillis()
+                val lastUsedTime =
+                        lastUsed.getOrPut(player, { mutableMapOf() }).getOrDefault(item.type, 0L)
+                if (currentTime - lastUsedTime < cooldown * 1000) {
+                    event.isCancelled = true
+                    val remainingTime =
+                            ceil((cooldown * 1000 - (currentTime - lastUsedTime)) / 1000.0)
+                                    .toInt()
+                                    .toString()
+                    sendMessage(player, "error.item.with_cooldown", remainingTime, type)
+                    return
+                }
+
+                lastUsed[player]!![item.type] = currentTime
+            }
+        }
+    }
+
     fun load() {
         val messagesFile = File(dataFolder, "messages.yml")
         if (!messagesFile.exists()) {
@@ -223,8 +286,8 @@ class Main : JavaPlugin(), Listener {
     }
 
     fun setMessagePrefixes() {
-        message.setConsolePrefix("<dark_red>[<red>Purge<dark_red>] <white>")
-        message.setChatPrefix("<dark_red>[<red>Purge<dark_red>] <white>")
+        message.setConsolePrefix("<dark_red>[<red>Purga<dark_red>] <white>")
+        message.setChatPrefix("<dark_red>[<red>Purga<dark_red>] <white>")
     }
 
     fun clearMessagePrefixes() {
@@ -243,6 +306,23 @@ class Main : JavaPlugin(), Listener {
             message.sendToPlayer(sender, key, *params)
         } else {
             message.sendToConsole(key, *params)
+        }
+    }
+
+    private fun showDeathTitleToAll(victim: Player, killer: Player?) {
+        for (player in Bukkit.getOnlinePlayers()) {
+            if (player == victim) continue
+            if (killer == null) {
+                title.showToPlayer(player, "title.player.death", "", victim.name)
+            } else {
+                title.showToPlayer(
+                        player,
+                        "title.player.death_by_player",
+                        "",
+                        killer.name,
+                        victim.name,
+                )
+            }
         }
     }
 

@@ -15,12 +15,14 @@ class PurgeDependency(private val plugin: Main) {
     private var originalKeepInventoryValues = mutableMapOf<String, Boolean>()
     private var originalDropOnDeathValue: Boolean? = null
     private var serverUsesDependencies: Boolean = false
+    private var serverUsesTabPlugin: Boolean = false
     private var minepacks: Plugin? = null
     private var luckPerms: Plugin? = null
 
     fun setConfig() {
         minepacks = Bukkit.getPluginManager().getPlugin("Minepacks")
         luckPerms = Bukkit.getPluginManager().getPlugin("LuckPerms")
+        serverUsesTabPlugin = Bukkit.getPluginManager().getPlugin("TAB")?.isEnabled == true
         if (!serverUsesDependencies()) return
         setDropInventory()
         setDropOnDeathValue(true)
@@ -32,6 +34,7 @@ class PurgeDependency(private val plugin: Main) {
         restoreBackpackConfig()
         originalDropOnDeathValue = null
         serverUsesDependencies = false
+        serverUsesTabPlugin = false
         minepacks = null
         luckPerms = null
     }
@@ -67,6 +70,22 @@ class PurgeDependency(private val plugin: Main) {
         val user = luckPermsApi.userManager.getUser(player.uniqueId)
         return user != null &&
                 user.cachedData.permissionData.checkPermission("backpack.keepOnDeath").asBoolean()
+    }
+
+    fun setTabPrefix(player: Player) {
+        if (serverUsesTabPlugin) {
+            val prefix = plugin.message.getString("immunity.player_prefix")
+            Bukkit.dispatchCommand(
+                    Bukkit.getConsoleSender(),
+                    "tab player ${player.name} tabprefix <dark_aqua>${prefix}<white>"
+            )
+        }
+    }
+
+    fun removeTabPrefix(player: Player) {
+        if (serverUsesTabPlugin) {
+            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "tab player ${player.name} tabprefix")
+        }
     }
 
     private fun serverUsesDependencies(): Boolean {

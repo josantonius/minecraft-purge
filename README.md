@@ -64,8 +64,8 @@ announcement sound.
     privilege_3: "<dark_gray>Privilege 24 <red>- <dark_aqua>Backpack is dropped upon death"
   ```
 
-- After the 2 minutes, the game starts playing the start sound and displaying a message in the chat
-announcing the start of the purge.
+- After 2 minutes, the game starts playing the startup sound (it lasts 03:04 and repeats in a loop)
+and displaying a message in the chat announcing the start of the purge.
 
 - At the end, the end sound is played and a message is displayed in the chat announcing the end of
 the purge.
@@ -105,6 +105,7 @@ Players with immunity:
 - Will not lose their inventory, experience, and backpack upon death.
 - Will be able to execute commands blocked during The Purge.
 - Will have the "glowing" effect during The Purge to be easily identified.
+- They are prefixed with `[Immune]` in the list of players if the dependency to the TAB plugin exists.
 
 Players without immunity:
 
@@ -159,6 +160,20 @@ endPurgeSound: "minecraft:purge.sound.end"
 blockedCommands:
   - "/spawn"
   - "/home"
+
+# Main world. Here players will be sent from the locked worlds.
+mainWorld: "spawn"
+
+# Worlds that will not be used during the purge.
+blockedWorlds:
+  - "world_nether"
+  - "world_the_end"
+
+# Apply a cooldown of n seconds between uses to the ender pearls.
+enderPearlCooldown: 10
+
+# Apply a cooldown of n seconds between uses to the firework rockets.
+fireworkRocketCooldown: 10
 ```
 
 ## Messages
