@@ -1,6 +1,5 @@
 # Minecraft Purge Plugin
 
-[![Release](https://jitpack.io/v/dev.josantonius/minecraft-purge.svg)](https://jitpack.io/#dev.josantonius/minecraft-purge)
 [![License](https://img.shields.io/github/license/josantonius/minecraft-purge)](LICENSE)
 
 Purge plugin for Minecraft servers.
