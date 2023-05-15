@@ -86,6 +86,7 @@ error:
 
 plugin:
   reloaded: "<dark_aqua>Plugin successfully reloaded!"
+  prefix: "<dark_red>[<red>Purge<dark_red>] <white>"
 
 material:
   ender_pearl: "ender pearls"

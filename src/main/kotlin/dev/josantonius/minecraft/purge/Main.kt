@@ -286,8 +286,8 @@ class Main : JavaPlugin(), Listener {
     }
 
     fun setMessagePrefixes() {
-        message.setConsolePrefix("<dark_red>[<red>Purga<dark_red>] <white>")
-        message.setChatPrefix("<dark_red>[<red>Purga<dark_red>] <white>")
+        message.setConsolePrefix(message.getString("plugin.prefix"))
+        message.setChatPrefix(message.getString("plugin.prefix"))
     }
 
     fun clearMessagePrefixes() {
