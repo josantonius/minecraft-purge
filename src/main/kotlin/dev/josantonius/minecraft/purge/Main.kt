@@ -72,6 +72,7 @@ class Main : JavaPlugin(), Listener {
         val player = event.player
         purge.getNoticeBossBar().removePlayer(player)
         purge.getOngoingBossBar().removePlayer(player)
+        purge.player.immunity.removePrivileges(player, false)
     }
 
     @EventHandler

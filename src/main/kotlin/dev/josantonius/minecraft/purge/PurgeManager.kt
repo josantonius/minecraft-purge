@@ -65,11 +65,11 @@ class PurgeManager(private val plugin: Main) {
             plugin.sendMessage(sender, "error.purge.not_active")
             return
         }
+        plugin.message.broadcast("purge.end")
         reset(true)
         showEndPurgeTitleToAll()
         purgeSound.stopMinecraftMusic()
         purgeSound.playEndPurgeSound()
-        plugin.message.broadcast("purge.end")
     }
 
     fun cancel(sender: CommandSender) {
@@ -83,11 +83,11 @@ class PurgeManager(private val plugin: Main) {
     }
 
     fun reset(isEnded: Boolean = false) {
-        player.immunity.removePrivilegesFromImmunePlayers(isEnded)
         purgeSound.stopPluginMusic()
         startedBossBar.hidden()
         announcementBossBar.hidden()
         cancelTasks()
+        player.immunity.removePrivilegesFromImmunePlayers(isEnded)
         dependency.restoreConfig()
         player.resetPlayerList()
         status.ended()

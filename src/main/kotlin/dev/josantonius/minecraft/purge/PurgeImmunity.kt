@@ -133,9 +133,9 @@ class PurgeImmunity(private val plugin: Main) {
         plugin.purge.dependency.setTabPrefix(player)
     }
 
-    fun removePrivileges(player: Player) {
+    fun removePrivileges(player: Player, removeAsImmune: Boolean = true) {
         var purgePlayer = plugin.purge.player.get(player)
-        purgePlayer.removeAsImmune()
+        if (removeAsImmune) purgePlayer.removeAsImmune()
         plugin.purge.player.removeGlowingEffect(player)
         plugin.purge.dependency.removeKeepOnDeathPermission(player)
         plugin.purge.dependency.removeTabPrefix(player)
@@ -146,19 +146,26 @@ class PurgeImmunity(private val plugin: Main) {
             if (purgeEnded) {
                 plugin.message.sendToPlayers("immunity.denied.advise", purgePlayer.getName())
             }
-            removePrivileges(Bukkit.getOfflinePlayer(purgePlayer.getUniqueId()) as Player)
+            val player = Bukkit.getPlayer(purgePlayer.getUniqueId())
+            if (player != null) removePrivileges(player)
         }
     }
 
     fun managePrivileges() {
         plugin.purge.player.getAll().forEach { purgePlayer ->
             if (purgePlayer.isImmune()) {
-                addPrivileges(Bukkit.getOfflinePlayer(purgePlayer.getUniqueId()) as Player)
-                plugin.message.broadcast("immunity.granted.announce", purgePlayer.getName())
+                val player = Bukkit.getPlayer(purgePlayer.getUniqueId())
+                if (player != null) {
+                    addPrivileges(player)
+                    plugin.message.broadcast("immunity.granted.announce", purgePlayer.getName())
+                }
             } else {
-                removePrivileges(Bukkit.getOfflinePlayer(purgePlayer.getUniqueId()) as Player)
-                if (purgePlayer.isApplicant()) {
-                    plugin.message.broadcast("immunity.denied.announce", purgePlayer.getName())
+                val player = Bukkit.getPlayer(purgePlayer.getUniqueId())
+                if (player != null) {
+                    removePrivileges(player)
+                    if (purgePlayer.isApplicant()) {
+                        plugin.message.broadcast("immunity.denied.announce", purgePlayer.getName())
+                    }
                 }
             }
         }
