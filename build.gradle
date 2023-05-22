@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'dev.josantonius.minecraft.purge'
-version '1.0.0'
+version '1.0.1'
 
 ext {
     _name = 'purge'

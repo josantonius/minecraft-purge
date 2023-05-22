@@ -1,5 +1,5 @@
 name: Purge
-version: 1.0.0
+version: 1.0.1
 main: dev.josantonius.minecraft.purge.Main
 api-version: 1.19
 author: Josantonius
