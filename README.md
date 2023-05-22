@@ -13,7 +13,7 @@ Purge plugin for Minecraft servers.
 
 ## Installation
 
-1. Download the JAR file: [purge-1.0.0-purpur-1.19.3.jar](/build/libs/purge-1.0.0-purpur-1.19.3.jar).
+1. Download the JAR file: [purge-1.0.1-purpur-1.19.3.jar](/build/libs/purge-1.0.1-purpur-1.19.3.jar).
 
 1. Place the JAR file in the plugins folder of your Minecraft server.
 
