@@ -36,6 +36,7 @@ class Main : JavaPlugin(), Listener {
     lateinit var purge: PurgeManager
     lateinit var message: Message
     lateinit var title: Title
+    var isDisabling: Boolean = false
     val lastUsed = mutableMapOf<Player, MutableMap<Material, Long>>()
 
     override fun onEnable() {
@@ -43,6 +44,7 @@ class Main : JavaPlugin(), Listener {
     }
 
     override fun onDisable() {
+        isDisabling = true
         purge.reset()
     }
 

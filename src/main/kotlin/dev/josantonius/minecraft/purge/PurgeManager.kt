@@ -92,7 +92,7 @@ class PurgeManager(private val plugin: Main) {
         player.resetPlayerList()
         status.ended()
         purgeInfo.clear()
-        plugin.load()
+        if (!plugin.isDisabling) plugin.load()
     }
 
     fun getNoticeBossBar(): PurgeBossBar {
