@@ -180,9 +180,19 @@ fireworkRocketCooldown: 10
 The `plugins/Purge/messages.yml` file contains all the messages that the plugin uses.
 You can change the messages to your liking.
 
-## Resources pack (optional - not included)
+## Resources pack
 
-The plugin plays three sounds during the purge: an announcement sound, a sound during the process,
+The plugin includes a resource pack that adds sounds to the game. The resource pack is optional and
+is not required for the plugin to work. You can download the resource pack for the version of the
+game you are using:
+
+- [Resource pack for 1.19 version](resource-packs/purge-resource-pack-1.19.zip)
+- [Resource pack for 1.20 version](resource-packs/purge-resource-pack-1.20.zip)
+
+**The announcement sound do not include the voice of the announcer. If you want to add voices like
+the one used in the video demo you can do it from [https://genny.lovo.ai](https://genny.lovo.ai).**
+
+Three sounds are played during the purge: an announcement sound, a sound during the process,
 and a sound at the end. These sounds can be customized in the plugin's configuration file
 (`plugins/Purge/config.yml`). Each of these sounds are defined as follows:
 
